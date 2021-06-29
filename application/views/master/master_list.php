@@ -1,6 +1,7 @@
 <link href="<?php echo base_url(); ?>assets/themplate/assets/plugins/datatables/media/css/buttons.dataTables.min.css" id="theme" rel="stylesheet">
 <link href="<?php echo base_url(); ?>assets/themplate/assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url(); ?>assets/themplate/assets/plugins/summernote/dist/summernote.css" rel="stylesheet" />
+<link href="<?php echo base_url(); ?>assets/themplate/assets/plugins/datatables24/css/jquery.dataTables.min.css" rel="stylesheet" />
         <div class="page-wrapper">
             <div class="container-fluid">
                 <div class="row page-titles">
@@ -27,6 +28,10 @@
 
                                 <?php if(isset( $data_detail['button_name3'])){ ?>
                                 <a href="<?php echo $data_detail['button_action_link3'] ?>" class="btn btn-info waves-effect waves-light" type="button"><span class="btn-label"><i class="<?php echo $data_detail['button_icon3'] ?>"></i></span> <?php echo $data_detail['button_name3'] ?></a>
+                                <?php } ?>
+
+                                <?php if(isset( $data_detail['button_name4'])){ ?>
+                                <a href="<?php echo $data_detail['button_action_link4'] ?>" class="btn btn-secondary waves-effect waves-light" type="button"><span class="btn-label"><i class="<?php echo $data_detail['button_icon4'] ?>"></i></span> <?php echo $data_detail['button_name4'] ?></a>
                                 <?php } ?>
 
                                 
@@ -58,7 +63,7 @@
 
                   </div>
                   <script src="<?php echo base_url(); ?>assets/themplate/assets/plugins/jquery/jquery.min.js"></script>
-                  <script src="<?php echo base_url(); ?>assets/themplate/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+                  <script src="<?php echo base_url(); ?>assets/themplate/assets/plugins/datatables24/js/jquery.dataTables.min.js"></script>
 
                   
     <!-- start - This is for export functionality only -->
@@ -90,35 +95,8 @@
                 };
 
                 var t = $("#mytable").dataTable({
-                    initComplete: function() {
-                        var api = this.api();
-                        $('#mytable_filter input')
-                                .off('.DT')
-                                .on('keyup.DT', function(e) {
-                                    if (e.keyCode == 13) {
-                                        api.search(this.value).draw();
-                            }
-                        });
-
-                        this.api().columns(show).every( function () {
-                        var column = this;
-                        var select = $('<select><option value=""></option></select>')
-                            .appendTo( $(column.footer()).empty() )
-                            .on( 'change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-        
-                                column
-                                    .search( val ? '^'+val+'$' : '', true, false )
-                                    .draw();
-                            } );
-        
-                        column.data().unique().sort().each( function ( d, j ) {
-                            select.append( '<option value="'+d+'">'+d+'</option>' )
-                        } );
-                    } );
-                    },
+                    
+                   
                     oLanguage: {
                         sProcessing: "loading..."
                     },
@@ -130,12 +108,13 @@
         buttons: [
             'pageLength','copy',  'excel', 'pdf', 'print'
         ],
-                    processing: true,
-                    serverSide: true,
-                    pagingType: "full_numbers",
+                    // processing: true,
+                    // serverSide: true,
                     ajax: {"url": "<?php echo $data_detail['link_json']; ?>", "type": "POST"},
+                    "deferRender": true,
                     "columns": dataObject[0].COLUMNS,
                     order: [[0, 'asc']],
+                    
                     rowCallback: function(row, data, iDisplayIndex) {
                         var info = this.fnPagingInfo();
                         var page = info.iPage;
